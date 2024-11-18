@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.clickhousejdbcdemo.dao.OperateDao">
+    <insert id="insert">
+        insert into sys_role (id, name, category, total, status, create_time, remark)
+        values (#{entity.id},
+                #{entity.name},
+                #{entity.category},
+                #{entity.total},
+                #{entity.status},
+                #{entity.createTime,jdbcType=DATE},
+                #{entity.remark})
+    </insert>
+
+    <insert id="insertMap">
+        insert into sys_role (id, name, category, total, status, create_time, remark)
+        values (#{map.id},
+                #{map.name},
+                #{map.category},
+                #{map.total},
+                #{map.status},
+                #{map.createTime,jdbcType=DATE},
+                #{map.remark})
+    </insert>
+
+    <insert id="insertBatch">
+        insert into sys_role (id, name, category, total, status, create_time, remark)
+        VALUES
+        <foreach collection="list" index="" item="entity" separator=",">
+            (
+                #{entity.id},
+                #{entity.name},
+                #{entity.category},
+                #{entity.total},
+                #{entity.status},
+                #{entity.createTime,jdbcType=DATE},
+                #{entity.remark}
+            )
+        </foreach>
+    </insert>
+
+    <sql id="columns">
+        id, name, category, total, status, create_time, remark
+    </sql>
+
+    <select id="selectById" resultType="com.example.clickhousejdbcdemo.entity.SysRole">
+        select
+        <include refid="columns"/>
+        from sys_role
+        where id = #{id}
+    </select>
+
+    <select id="selectList" resultType="com.example.clickhousejdbcdemo.entity.SysRole">
+        select
+        <include refid="columns"/>
+        from sys_role
+        order by create_time desc
+        limit 100
+    </select>
+
+    <select id="selectPageList" resultType="com.example.clickhousejdbcdemo.entity.SysRole">
+        select
+        <include refid="columns"/>
+        from sys_role
+        order by id
+    </select>
+
+    <select id="selectMapList" resultType="map">
+        SELECT name,value FROM system.settings
+        where name in ('async_insert_busy_timeout_ms','async_insert_max_data_size','async_insert','wait_for_async_insert')
+    </select>
+</mapper>
